@@ -1,5 +1,6 @@
 #include "Delegate/delegate.h"
 
+#include <QString>
 #include <QMessageBox>
 #include <QAction>
 #include <QApplication>
@@ -11,13 +12,15 @@
 
 Delegate::Delegate(View &viewport)
 {
-    scribbleArea = new ScribbleArea;
-    viewport.setCentralWidget(scribbleArea);
-    viewport.openAct->setShortcuts(QKeySequence::Open);
     connect(viewport.openAct,&QAction::triggered,this,&Delegate::open);
     foreach(QAction *action,viewport.saveAsActs){
             connect(action,&QAction::triggered,this,&Delegate::save);
         }
+    connect(viewport.saveConfig,&QAction::triggered,this,&Delegate::saveConfig);
+
+    scribbleArea = new ScribbleArea;
+    viewport.setCentralWidget(scribbleArea);
+    viewport.openAct->setShortcuts(QKeySequence::Open);
 
     connect(viewport.penColor,&QAction::triggered,this,&Delegate::penColor);
     connect(viewport.penWidth,&QAction::triggered,this,&Delegate::penWidth);
@@ -48,6 +51,10 @@ void Delegate::penColor(){
     }
 }
 
+void Delegate::saveConfig(){
+        scribbleArea->saveConfigJSON();
+}
+
 void Delegate::penWidth(){
     bool ok;
     int newWidth = QInputDialog::getInt(scribbleArea,tr("Scribble"),tr("Select pen width: "),scribbleArea->getPenWidth(),1,50,1,&ok);
@@ -57,7 +64,7 @@ void Delegate::penWidth(){
 }
 
 void Delegate::about(){
-    QMessageBox::about(new QWidget,tr("About Scribble"),tr("<p>The <b>Scribble</b> example is awesome </p>"));
+    QMessageBox::about(new QWidget,tr("About Paint"),tr("<p>The <b>Scribble</b> example is awesome </p>"));
 }
 
 bool Delegate::saveFile(const QByteArray &fileFormat){

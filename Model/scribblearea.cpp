@@ -1,15 +1,22 @@
 #include "Model/scribblearea.h"
 
+#include <iostream>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QTextStream>
+#include <QMessageBox>
+#include <QDebug>
+#include <QColor>
 
 ScribbleArea::ScribbleArea(QWidget *parent):QWidget(parent)
 {
     setAttribute(Qt::WA_StaticContents);
     modified = false;
     scribbling = false;
-    myPenWidth = 10;
-    myPenColor = Qt::black;
+    if(!loadConfig()){
+        myPenWidth = 10;
+        myPenColor = Qt::black;
+    }
 }
 
 bool ScribbleArea::openImage(const QString &fileName){
@@ -32,6 +39,57 @@ bool ScribbleArea::saveImage(const QString &fileName,const char *fileFormat){
         return true;
     }else{
         return false;
+    }
+}
+
+bool ScribbleArea::loadConfig(){
+    QFile file;
+    globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
+    file.setFileName(globalPath);
+    //file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
+    if(file.open(QIODevice::ReadOnly|QFile::Text)){
+        doc = QJsonDocument::fromJson(QByteArray(file.readAll()), &docError);
+        if(docError.errorString().toInt() == QJsonParseError::NoError){
+            QJsonObject jsonObj = doc.object();
+            //"penColor" : "blue",
+            //"penWidth" : 30
+            QString color;
+            color = jsonObj.value("penColor").toString();
+            myPenColor.setNamedColor(color);
+            myPenWidth = jsonObj.value("penWidth").toInt();
+            //doc.object()["penWidth"] = 10;
+            file .close();
+            return true;
+        }
+        else{
+            QMessageBox::information(nullptr,"info","Файл содержит ошибку");
+            return false;
+        }
+    }
+    else{
+        QMessageBox::information(nullptr,"info","Файл не открыт на чтенеи");
+        return false;
+    }
+}
+
+void ScribbleArea::saveConfigJSON(){
+    QFile file;
+    //globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
+    file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
+    if(file.open(QIODevice::WriteOnly|QFile::Text)){
+        QJsonObject jsonObj = doc.object();
+        jsonObj.insert("penColor",QJsonValue::fromVariant(myPenColor));
+        jsonObj.insert("penWidth",QJsonValue::fromVariant(myPenWidth));
+        QJsonDocument doc(jsonObj);
+        QString jsonString = doc.toJson(QJsonDocument::Indented);
+        QTextStream stream (&file);
+        stream<<jsonString;
+        qDebug()<<jsonObj["penWidth"].toInt();
+        //file.write(doc.toJson());
+        file .close();
+    }
+    else{
+        QMessageBox::information(nullptr,"info","Файл не открыт на чтенеи");
     }
 }
 

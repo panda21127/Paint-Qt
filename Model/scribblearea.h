@@ -2,6 +2,11 @@
 #define SCRIBBLEAREA_H
 
 #include <QWidget>
+#include <QJsonObject>
+#include <QJsonParseError>
+#include <QFile>
+#include <QFileDialog>
+#include <QStandardItem>
 
 class ScribbleArea: public QWidget
 {
@@ -23,6 +28,7 @@ public:
 
     bool openImage(const QString &fileName);
     bool saveImage(const QString &fileName,const char *fileFormat);
+    void saveConfigJSON();
 public slots:
     void clearImage();
 protected:
@@ -34,7 +40,12 @@ protected:
 private:
     void drawLineTo(const QPoint &endPoint);
     void resizeImage(QImage *image,const QSize &newSize);
+    bool loadConfig();
 
+
+    QJsonDocument doc;
+    QJsonParseError docError;
+    QString globalPath;
     QPoint lastPoint;
     QImage image;
 
