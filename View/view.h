@@ -15,6 +15,7 @@ public:
     QMenu *save;
     QList<QAction*> saveAsActs;
     QAction * saveConfig;
+    QAction * createNew;
     QAction * openAct;
 
     QAction * penColor;

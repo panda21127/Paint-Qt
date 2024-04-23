@@ -18,6 +18,8 @@ Delegate::Delegate(View &viewport)
         }
     connect(viewport.saveConfig,&QAction::triggered,this,&Delegate::saveConfig);
 
+    connect(viewport.createNew,&QAction::triggered,this,&Delegate::createNew);
+
     scribbleArea = new ScribbleArea;
     viewport.setCentralWidget(scribbleArea);
     viewport.openAct->setShortcuts(QKeySequence::Open);
@@ -53,6 +55,10 @@ void Delegate::penColor(){
 
 void Delegate::saveConfig(){
         scribbleArea->saveConfigJSON();
+}
+
+void Delegate::createNew(){
+        scribbleArea->clearImage();
 }
 
 void Delegate::penWidth(){

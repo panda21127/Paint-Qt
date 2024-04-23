@@ -15,6 +15,7 @@ public slots:
     void open();
     void save();
     void saveConfig();
+    void createNew();
     bool saveFile(const QByteArray &fileFormat);
     void about();
     void penColor();

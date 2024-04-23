@@ -30,12 +30,16 @@ void View::createMenu(){
             save->addAction(action);
         }
 
+    createNew = new QAction(tr("Create New"),this);
+
     saveConfig = new QAction(tr("Save Config"),this);
     openAct = new QAction (tr("&Open"),this);
     openAct->setShortcuts(QKeySequence::Open);
 
+
     fileMenu->addMenu(save);
     fileMenu->addAction(saveConfig);
+    fileMenu->addAction(createNew);
     fileMenu->addSeparator();
     fileMenu->addAction(openAct);
 
