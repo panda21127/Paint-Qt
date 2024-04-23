@@ -32,18 +32,23 @@ Delegate::Delegate(View &viewport)
 }
 
 void Delegate::open(){
-    //if(maybeSave()){
         QString filename = QFileDialog::getOpenFileName(scribbleArea,tr("Open File"),QDir::currentPath());
         if(!filename.isEmpty()){
             scribbleArea->openImage(filename); //&&&&&
         }
-    //}
 }
 
 void Delegate::save(){
-    QAction *action = qobject_cast<QAction *>(sender());
-    QByteArray fileFormat = action->data().toByteArray();
-    saveFile(fileFormat);
+    if(scribbleArea->isModified()){
+        QAction *action = qobject_cast<QAction *>(sender());
+        QByteArray fileFormat = action->data().toByteArray();
+        if(saveFile(fileFormat)){
+            QMessageBox::information(nullptr,"info","Файл сохранён");
+        }
+        else{
+            QMessageBox::information(nullptr,"info","Файл не сохранён");
+        }
+    }
 }
 
 void Delegate::penColor(){
@@ -63,14 +68,14 @@ void Delegate::createNew(){
 
 void Delegate::penWidth(){
     bool ok;
-    int newWidth = QInputDialog::getInt(scribbleArea,tr("Scribble"),tr("Select pen width: "),scribbleArea->getPenWidth(),1,50,1,&ok);
+    int newWidth = QInputDialog::getInt(scribbleArea,tr("Width"),tr("Select pen width: "),scribbleArea->getPenWidth(),1,50,1,&ok);
     if(ok){
         scribbleArea->setPenWidth(newWidth);
     }
 }
 
 void Delegate::about(){
-    QMessageBox::about(new QWidget,tr("About Paint"),tr("<p>The <b>Scribble</b> example is awesome </p>"));
+    QMessageBox::about(new QWidget,tr("About Paint"),tr("<p><b>Paint</b> вышел неплохим </p>"));
 }
 
 bool Delegate::saveFile(const QByteArray &fileFormat){
@@ -83,5 +88,4 @@ bool Delegate::saveFile(const QByteArray &fileFormat){
     }else{
         return scribbleArea->saveImage(fileName,fileFormat.constData());
     }
-
 }

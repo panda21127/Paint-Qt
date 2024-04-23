@@ -1,6 +1,7 @@
 #include "Model/scribblearea.h"
 
 #include <iostream>
+#include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QTextStream>
@@ -31,6 +32,7 @@ bool ScribbleArea::openImage(const QString &fileName){
     update();
     return true;
 }
+
 bool ScribbleArea::saveImage(const QString &fileName,const char *fileFormat){
     QImage visibleImage = image;
     resizeImage(&visibleImage,size());
@@ -75,6 +77,7 @@ bool ScribbleArea::loadConfig(){
 void ScribbleArea::saveConfigJSON(){
     QFile file;
     //globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
+    //file.setFileName(globalPath);
     file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
     if(file.open(QIODevice::WriteOnly|QFile::Text)){
         QJsonObject jsonObj = doc.object();
