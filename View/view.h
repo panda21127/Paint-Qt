@@ -21,6 +21,10 @@ public:
     QAction * penColor;
     QAction * penWidth;
 
+    QAction * drawLine;
+    QAction * ellipse;
+    QAction * square;
+
     QAction * info;
     QAction * infoQT;
 private:
@@ -29,6 +33,7 @@ private:
     QMenu *fileMenu;
     QMenu *penMenu;
     QAction *exampleMenu;
+    QMenu *shapes;
     QMenu *informationMenu;
 
 };

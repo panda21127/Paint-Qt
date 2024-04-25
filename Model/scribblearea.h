@@ -23,6 +23,9 @@ public:
     int getPenWidth() const {return myPenWidth;};
     void setPenWidth(int width){ myPenWidth = width;};
 
+    int getIndex() const {return index;};
+    void setIndex(int newIndex){ index = newIndex;};
+
     QColor getPenColor() const {return myPenColor;};
     void setPenColor(QColor color){ myPenColor = color;};
 
@@ -39,6 +42,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 private:
     void drawLineTo(const QPoint &endPoint);
+    void drawSquare(const QPoint &endPoint);
+    void drawEllipse(const QPoint &endPoint);
     void resizeImage(QImage *image,const QSize &newSize);
     bool loadConfig();
 
@@ -53,6 +58,8 @@ private:
     bool scribbling;
     int myPenWidth;
     QColor myPenColor;
+
+    int index;
 };
 
 #endif // SCRIBBLEAREA_H

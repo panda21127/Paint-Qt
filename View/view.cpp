@@ -49,6 +49,14 @@ void View::createMenu(){
     penMenu->addAction(penColor);
     penMenu->addAction(penWidth);
 
+    shapes = new QMenu(tr("&Shapes"),this);
+    drawLine = new QAction(tr("Pen"),this);
+    ellipse = new QAction(tr("Ellipse"),this);
+    square = new QAction(tr("Square"),this);
+    shapes->addAction(drawLine);
+    shapes->addAction(ellipse);
+    shapes->addAction(square);
+
     exampleMenu = new QAction(tr("&Example"),this);
 
     informationMenu = new QMenu(tr("&Information"),this);
@@ -59,6 +67,7 @@ void View::createMenu(){
 
     menuBar()->addMenu(fileMenu);
     menuBar()->addMenu(penMenu);
+    menuBar()->addMenu(shapes);
     menuBar()->addAction(exampleMenu);
     menuBar()->addMenu(informationMenu);
 }

@@ -1,5 +1,6 @@
 #include "View/view.h"
 #include "Delegate/delegate.h"
+#include "Model/zoomwidget.h"
 
 #include <QApplication>
 #include <QLocale>
@@ -20,6 +21,9 @@ int main(int argc, char *argv[])
             break;
         }
     }
+    a.setApplicationName("Zoom widget");
+    //ZoomWidget w;
+    //w.show();
     View view;
     Delegate *delegate = new Delegate(view);
     view.show();

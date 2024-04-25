@@ -27,6 +27,10 @@ Delegate::Delegate(View &viewport)
     connect(viewport.penColor,&QAction::triggered,this,&Delegate::penColor);
     connect(viewport.penWidth,&QAction::triggered,this,&Delegate::penWidth);
 
+    connect(viewport.drawLine,&QAction::triggered,this,&Delegate::drawLine);
+    connect(viewport.ellipse,&QAction::triggered,this,&Delegate::drawEllipse);
+    connect(viewport.square,&QAction::triggered,this,&Delegate::drawSquare);
+
     connect(viewport.info,&QAction::triggered,this,&Delegate::about);
     connect(viewport.infoQT,&QAction::triggered,qApp,&QApplication::aboutQt);
 }
@@ -88,4 +92,16 @@ bool Delegate::saveFile(const QByteArray &fileFormat){
     }else{
         return scribbleArea->saveImage(fileName,fileFormat.constData());
     }
+}
+
+void Delegate::drawLine(){
+        scribbleArea->setIndex(0);
+}
+
+void Delegate::drawEllipse(){
+        scribbleArea->setIndex(1);
+}
+
+void Delegate::drawSquare(){
+        scribbleArea->setIndex(2);
 }

@@ -19,6 +19,10 @@ private slots:
     void about();
     void penColor();
     void penWidth();
+
+    void drawLine();
+    void drawEllipse();
+    void drawSquare();
 private:
     bool saveFile(const QByteArray &fileFormat);
     QPoint lastPoint;
