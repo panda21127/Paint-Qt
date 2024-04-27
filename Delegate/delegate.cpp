@@ -10,8 +10,11 @@
 #include <QInputDialog>
 #include <QFileDialog>
 
-Delegate::Delegate(View &viewport)
+Delegate::Delegate()
 {
+        scribbleArea = new ScribbleArea;
+}
+void Delegate::start(View &viewport){
     connect(viewport.openAct,&QAction::triggered,this,&Delegate::open);
     foreach(QAction *action,viewport.saveAsActs){
             connect(action,&QAction::triggered,this,&Delegate::save);
@@ -20,7 +23,6 @@ Delegate::Delegate(View &viewport)
 
     connect(viewport.createNew,&QAction::triggered,this,&Delegate::createNew);
 
-    scribbleArea = new ScribbleArea;
     viewport.setCentralWidget(scribbleArea);
     viewport.openAct->setShortcuts(QKeySequence::Open);
 
@@ -31,8 +33,14 @@ Delegate::Delegate(View &viewport)
     connect(viewport.ellipse,&QAction::triggered,this,&Delegate::drawEllipse);
     connect(viewport.square,&QAction::triggered,this,&Delegate::drawSquare);
 
+    connect(viewport.drawSpecifiElipse,&QAction::triggered,this,&Delegate::drawSpecifiElipse);
+    connect(viewport.drawSpecifiSquare,&QAction::triggered,this,&Delegate::drawSpecifiSquare);
+    connect(viewport.lasso,&QAction::triggered,this,&Delegate::drawLasso);
+
     connect(viewport.info,&QAction::triggered,this,&Delegate::about);
     connect(viewport.infoQT,&QAction::triggered,qApp,&QApplication::aboutQt);
+
+    connect(viewport.exampleMenu,&QAction::triggered,this,&Delegate::startExample);
 }
 
 void Delegate::open(){
@@ -104,4 +112,35 @@ void Delegate::drawEllipse(){
 
 void Delegate::drawSquare(){
         scribbleArea->setIndex(2);
+}
+
+void Delegate::drawSpecifiElipse(){
+        scribbleArea->setIndex(10);
+}
+
+void Delegate::drawSpecifiSquare(){
+        scribbleArea->setIndex(11);
+}
+
+void Delegate::drawLasso(){
+        scribbleArea->setIndex(12);
+}
+
+void Delegate::startExample(){
+    //Example example("Thread");
+    Example* example = new Example("Thread");
+    example->setScribbleArea(scribbleArea);
+    QThread* thread = new QThread;/* передаем список файлов для обработки */
+    QThread* thread2 = new QThread;
+    example->moveToThread(thread);
+    //scribbleArea->moveToThread(thread2);
+    connect(thread, &QThread::started, example, &Example::run);
+    connect(thread2, &QThread::started, scribbleArea, &ScribbleArea::drawExample);
+    thread->start();
+    thread2->start();
+    //example->run();
+}
+
+Delegate::~Delegate(){
+        delete scribbleArea;
 }

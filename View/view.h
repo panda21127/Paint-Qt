@@ -11,9 +11,9 @@ class View : public QMainWindow
 
 public:
     View(QWidget *parent = nullptr);
-public:
+    ~View();
     QMenu *save;
-    QList<QAction*> saveAsActs;
+    QList<QAction*> saveAsActs; //
     QAction * saveConfig;
     QAction * createNew;
     QAction * openAct;
@@ -25,6 +25,12 @@ public:
     QAction * ellipse;
     QAction * square;
 
+    QAction * drawSpecifiSquare;
+    QAction * drawSpecifiElipse;
+    QAction * lasso;
+
+    QAction *exampleMenu;
+
     QAction * info;
     QAction * infoQT;
 private:
@@ -32,8 +38,8 @@ private:
     void arratactions();
     QMenu *fileMenu;
     QMenu *penMenu;
-    QAction *exampleMenu;
     QMenu *shapes;
+    QMenu *specifiShapes;
     QMenu *informationMenu;
 
 };

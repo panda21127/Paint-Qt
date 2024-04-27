@@ -57,6 +57,14 @@ void View::createMenu(){
     shapes->addAction(ellipse);
     shapes->addAction(square);
 
+    specifiShapes = new QMenu(tr("Specidic &Shapes"),this);
+    drawSpecifiElipse = new QAction(tr("Specific Elipse"),this);
+    drawSpecifiSquare = new QAction(tr("Specific Square"),this);
+    lasso = new QAction(tr("Lasso"),this);
+    specifiShapes->addAction(drawSpecifiElipse);
+    specifiShapes->addAction(drawSpecifiSquare);
+    specifiShapes->addAction(lasso);
+
     exampleMenu = new QAction(tr("&Example"),this);
 
     informationMenu = new QMenu(tr("&Information"),this);
@@ -68,8 +76,35 @@ void View::createMenu(){
     menuBar()->addMenu(fileMenu);
     menuBar()->addMenu(penMenu);
     menuBar()->addMenu(shapes);
+    menuBar()->addMenu(specifiShapes);
     menuBar()->addAction(exampleMenu);
     menuBar()->addMenu(informationMenu);
 }
 
+View::~View(){
+    delete save;
+    foreach(QAction *action,saveAsActs){
+           delete action;
+        }
+    delete saveConfig;
+    delete createNew;
+    delete openAct;
+    delete penColor;
+    delete penWidth;
+    delete drawLine;
+    delete ellipse;
+    delete square;
+    delete drawSpecifiSquare;
+    delete drawSpecifiElipse;
+    delete lasso;
+    delete info;
+    delete infoQT;
+    delete fileMenu;
+    delete penMenu;
+    delete exampleMenu;
+    delete shapes;
+    delete specifiShapes;
+    delete informationMenu;
+
+}
 

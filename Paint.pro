@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Delegate/delegate.cpp \
+    Model/example.cpp \
     Model/scribblearea.cpp \
     Model/zoomwidget.cpp \
     View/view.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     Delegate/delegate.h \
+    Model/example.h \
     Model/scribblearea.h \
     Model/zoomwidget.h \
     View/view.h \

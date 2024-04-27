@@ -8,6 +8,7 @@ class ZoomWidget: public QWidget
 public:
     ZoomWidget();
 protected:
+    void paintEvent(QPaintEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

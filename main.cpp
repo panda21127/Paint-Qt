@@ -22,10 +22,15 @@ int main(int argc, char *argv[])
         }
     }
     a.setApplicationName("Zoom widget");
-    //ZoomWidget w;
-    //w.show();
+#if 0
+    ZoomWidget w;
+    w.show();
+#endif
+#if 1
     View view;
-    Delegate *delegate = new Delegate(view);
+    Delegate *delegate = new Delegate();
+    delegate->start(view);
     view.show();
+#endif
     return a.exec();
 }

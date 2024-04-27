@@ -3,6 +3,7 @@
 
 #include "View/view.h"
 #include "Model/scribblearea.h"
+#include "Model/example.h"
 
 #include <QWidget>
 
@@ -10,7 +11,9 @@ class Delegate: public QObject
 {
     Q_OBJECT
 public:
-    Delegate(View &viewport);
+    Delegate();
+    void start(View &viewport);
+    ~Delegate();
 private slots:
     void open();
     void save();
@@ -23,6 +26,12 @@ private slots:
     void drawLine();
     void drawEllipse();
     void drawSquare();
+
+    void drawSpecifiElipse();
+    void drawSpecifiSquare();
+    void drawLasso();
+
+    void startExample();
 private:
     bool saveFile(const QByteArray &fileFormat);
     QPoint lastPoint;

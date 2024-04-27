@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QColor>
+#include <QThread>
 
 ScribbleArea::ScribbleArea(QWidget *parent):QWidget(parent)
 {
@@ -47,9 +48,9 @@ bool ScribbleArea::saveImage(const QString &fileName,const char *fileFormat){
 
 bool ScribbleArea::loadConfig(){
     QFile file;
-    globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
-    file.setFileName(globalPath);
-    //file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
+    //globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
+    //file.setFileName(globalPath);
+    file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
     if(file.open(QIODevice::ReadOnly|QFile::Text)){
         doc = QJsonDocument::fromJson(QByteArray(file.readAll()), &docError);
         if(docError.errorString().toInt() == QJsonParseError::NoError){
@@ -121,13 +122,29 @@ void ScribbleArea::mouseMoveEvent(QMouseEvent *event){
     case 1:
            if((event->buttons()& Qt::LeftButton)&& isScribbling()){
                setModified(true);
-               //update();
            }
            break;
     case 2:
            if((event->buttons()& Qt::LeftButton)&& isScribbling()){
                setModified(true);
-               //update();
+           }
+           break;
+    case 10:
+           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
+               drawSpecifiElipse(event->pos());
+               setModified(true);
+           }
+           break;
+    case 11:
+           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
+               drawSquare(event->pos());
+               setModified(true);
+           }
+           break;
+    case 12:
+           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
+               drawLasso(event->pos());
+               setModified(true);
            }
            break;
     }
@@ -150,6 +167,24 @@ void ScribbleArea::mouseReleaseEvent(QMouseEvent *event){
     case 2:
         if((event->buttons() != Qt::LeftButton)&& isScribbling()){
             drawSquare(event->pos());
+            setScribbling(false);
+        }
+        break;
+    case 10:
+        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
+            drawSpecifiElipse(event->pos());
+            setScribbling(false);
+        }
+        break;
+    case 11:
+        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
+            drawSquare(event->pos());
+            setScribbling(false);
+        }
+        break;
+    case 12:
+        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
+            drawLasso(event->pos());
             setScribbling(false);
         }
         break;
@@ -194,25 +229,23 @@ void ScribbleArea::drawLineTo(const QPoint &endPoint){
     update(QRect(lastPoint,endPoint).normalized().adjusted(-rad,-rad,+rad,+rad));
     lastPoint=endPoint;
 }
-/*
-void ScribbleArea::drawSquare(const QPoint &endPoint){
+
+void ScribbleArea::drawSpecifiElipse(const QPoint &endPoint){
     QPainter painter(&image);
     painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawLine(lastPoint,endPoint);
     painter.drawEllipse(lastPoint.x(),lastPoint.y(),endPoint.x(),endPoint.y());
     setModified(true);
     update();
     lastPoint=endPoint;
 }
 
-void ScribbleArea::drawSquare(const QPoint &endPoint){
+void ScribbleArea::drawLasso(const QPoint &endPoint){
     QPainter painter(&image);
     painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     painter.drawLine(lastPoint,endPoint);
     setModified(true);
     update();
 }
-*/
 
 void ScribbleArea::drawEllipse(const QPoint &endPoint){
     QPainter painter(&image);
@@ -228,4 +261,29 @@ void ScribbleArea::drawSquare(const QPoint &endPoint){
     painter.drawRect(lastPoint.x(),lastPoint.y(),endPoint.x()-lastPoint.x(),endPoint.y()-lastPoint.y());
     setModified(true);
     update();
+}
+
+void ScribbleArea::drawExample(){
+    QPainter painter(&image);
+    painter.setPen(QPen(Qt::black,5,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+    for(int i=10;i<150;i++){
+        painter.drawLine(i, 30, i + 1, 30);
+        repaint();
+        QThread::msleep(10);
+    }
+    for(int i=30;i<120;i++){
+        painter.drawLine(150, i, 150, i+1);
+        repaint();
+        QThread::msleep(10);
+    }
+    for(int i=150;i>10;i--){
+        painter.drawLine(i, 120, i-1, 120);
+        repaint();
+        QThread::msleep(10);
+    }
+    for(int i=120;i>30;i--){
+        painter.drawLine(10, i, 10, i-1);
+        repaint();
+        QThread::msleep(10);
+    }
 }

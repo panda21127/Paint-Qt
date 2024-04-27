@@ -29,9 +29,14 @@ public:
     QColor getPenColor() const {return myPenColor;};
     void setPenColor(QColor color){ myPenColor = color;};
 
+    QImage getImage() const {return image;};
+    void setImage(QImage image_temp){ image = image_temp;};
+
     bool openImage(const QString &fileName);
     bool saveImage(const QString &fileName,const char *fileFormat);
     void saveConfigJSON();
+
+    void drawExample();
 public slots:
     void clearImage();
 protected:
@@ -44,6 +49,10 @@ private:
     void drawLineTo(const QPoint &endPoint);
     void drawSquare(const QPoint &endPoint);
     void drawEllipse(const QPoint &endPoint);
+
+    void drawSpecifiElipse(const QPoint &endPoint);
+    void drawLasso(const QPoint &endPoint);
+
     void resizeImage(QImage *image,const QSize &newSize);
     bool loadConfig();
 

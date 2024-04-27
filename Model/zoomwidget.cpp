@@ -21,7 +21,7 @@ void ZoomWidget::mouseMoveEvent(QMouseEvent *event){
     repaint();
 }
 
-void ZoomWidget::mouseReleaseEvent(QMouseEvent *event){
+void ZoomWidget::mouseReleaseEvent(QMouseEvent *){
     m_mousePressed = false;
 }
 
@@ -38,4 +38,20 @@ void ZoomWidget::wheelEvent(QWheelEvent *event)
     m_scale = newScale;
     m_mousePrevPos = event->pos();
     repaint();
+}
+void ZoomWidget::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+    QPainter painter(this);
+    int w = 100; // ширина каждого прямоугольника
+    int h = 60;  // высота каждого прямоугольника
+
+    painter.setBrush(Qt::green);
+    painter.drawRect(0, 0, w, h);    // левый верхний
+    painter.setBrush(Qt::yellow);
+    painter.drawRect(w, 0, w, h);    // правый верхний
+    painter.setBrush(Qt::magenta);
+    painter.drawRect(0, h, w, h);    // левый нижний
+    painter.setBrush(Qt::cyan);
+    painter.drawRect(w, h, w, h);    // правый нижний
 }
