@@ -3,6 +3,8 @@
 
 #include "Model/scribblearea.h"
 
+#include <QActionGroup>
+#include <QRadioButton>
 #include <QMainWindow>
 
 class View : public QMainWindow
@@ -18,8 +20,11 @@ public:
     QAction * createNew;
     QAction * openAct;
 
+    QAction * drawPen;
     QAction * penColor;
     QAction * penWidth;
+    QAction * brushActive;
+    //QRadioButton * alignmentGroup;
 
     QAction * drawLine;
     QAction * ellipse;
@@ -29,7 +34,7 @@ public:
     QAction * drawSpecifiElipse;
     QAction * lasso;
 
-    QAction *exampleMenu;
+    QAction * exampleMenu;
 
     QAction * info;
     QAction * infoQT;

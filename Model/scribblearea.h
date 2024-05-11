@@ -1,6 +1,8 @@
 #ifndef SCRIBBLEAREA_H
 #define SCRIBBLEAREA_H
 
+#include "Model/Shapes/square.h"
+
 #include <QWidget>
 #include <QJsonObject>
 #include <QJsonParseError>
@@ -32,6 +34,10 @@ public:
     QImage getImage() const {return image;};
     void setImage(QImage image_temp){ image = image_temp;};
 
+    void setShape(MyShapes *shape_temp){ shape = shape_temp;};
+
+    void ChangeBrushActive(int brushActive);
+
     bool openImage(const QString &fileName);
     bool saveImage(const QString &fileName,const char *fileFormat);
     void saveConfigJSON();
@@ -46,12 +52,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 private:
-    void drawLineTo(const QPoint &endPoint);
-    void drawSquare(const QPoint &endPoint);
-    void drawEllipse(const QPoint &endPoint);
-
-    void drawSpecifiElipse(const QPoint &endPoint);
-    void drawLasso(const QPoint &endPoint);
+    void drawObject(MyShapes &shape,const QPoint &endPoint);
 
     void resizeImage(QImage *image,const QSize &newSize);
     bool loadConfig();
@@ -69,6 +70,7 @@ private:
     QColor myPenColor;
 
     int index;
+    MyShapes *shape;
 };
 
 #endif // SCRIBBLEAREA_H

@@ -4,6 +4,9 @@
 #include "View/view.h"
 #include "Model/scribblearea.h"
 #include "Model/example.h"
+#include "Model/Shapes/square.h"
+#include "Model/Shapes/elipse.h"
+#include "Model/Shapes/line.h"
 
 #include <QWidget>
 
@@ -23,6 +26,7 @@ private slots:
     void penColor();
     void penWidth();
 
+    void drawPen();
     void drawLine();
     void drawEllipse();
     void drawSquare();
@@ -31,11 +35,13 @@ private slots:
     void drawSpecifiSquare();
     void drawLasso();
 
+    void ActiveBrush();
     void startExample();
 private:
     bool saveFile(const QByteArray &fileFormat);
     QPoint lastPoint;
     ScribbleArea *scribbleArea;
+    bool brushActive;
 };
 
 #endif // DELEGATE_H

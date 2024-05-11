@@ -1,5 +1,7 @@
 #include "Model/scribblearea.h"
 
+#include "Model/Shapes/line.h"
+
 #include <iostream>
 #include <QAction>
 #include <QPainter>
@@ -15,7 +17,7 @@ ScribbleArea::ScribbleArea(QWidget *parent):QWidget(parent)
     setAttribute(Qt::WA_StaticContents);
     modified = false;
     scribbling = false;
-    index = 0;
+    index = 2;
     if(!loadConfig()){
         myPenWidth = 10;
         myPenColor = Qt::black;
@@ -113,81 +115,23 @@ void ScribbleArea::mousePressEvent(QMouseEvent *event){
 
 void ScribbleArea::mouseMoveEvent(QMouseEvent *event){
 
+    setModified(true);
     switch(index){
-    case 0:
-           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
-                drawLineTo(event->pos());
-           }
-           break;
-    case 1:
-           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
-               setModified(true);
-           }
-           break;
-    case 2:
-           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
-               setModified(true);
-           }
-           break;
-    case 10:
-           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
-               drawSpecifiElipse(event->pos());
-               setModified(true);
-           }
-           break;
-    case 11:
-           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
-               drawSquare(event->pos());
-               setModified(true);
-           }
-           break;
-    case 12:
-           if((event->buttons()& Qt::LeftButton)&& isScribbling()){
-               drawLasso(event->pos());
-               setModified(true);
-           }
-           break;
+    case 1:{drawObject(*shape,event->pos());break;}
+    case 2:{
+        shape = new Line();
+        drawObject(*shape,event->pos());
+        int rad = (getPenWidth() / 2) + 2;
+        update(QRect(lastPoint,event->pos()).normalized().adjusted(-rad,-rad,+rad,+rad));
+        lastPoint=event->pos();
+        break;}
     }
 }
 
 void ScribbleArea::mouseReleaseEvent(QMouseEvent *event){
-    switch(index){
-    case 0:
-        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
-            drawLineTo(event->pos());
-            setScribbling(false);
-        }
-        break;
-    case 1:
-        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
-            drawEllipse(event->pos());
-            setScribbling(false);
-        }
-        break;
-    case 2:
-        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
-            drawSquare(event->pos());
-            setScribbling(false);
-        }
-        break;
-    case 10:
-        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
-            drawSpecifiElipse(event->pos());
-            setScribbling(false);
-        }
-        break;
-    case 11:
-        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
-            drawSquare(event->pos());
-            setScribbling(false);
-        }
-        break;
-    case 12:
-        if((event->buttons() != Qt::LeftButton)&& isScribbling()){
-            drawLasso(event->pos());
-            setScribbling(false);
-        }
-        break;
+    if((event->buttons() != Qt::LeftButton)&& isScribbling()){
+        drawObject(*shape,event->pos());
+        setScribbling(false);
     }
 }
 
@@ -219,47 +163,14 @@ void ScribbleArea::resizeImage(QImage *image,const QSize &newSize){
     *image = newImage;
 }
 
-void ScribbleArea::drawLineTo(const QPoint &endPoint){
-    QPainter painter(&image);
-    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawLine(lastPoint,endPoint);
-    //painter.drawEllipse(lastPoint.x(),lastPoint.y(),endPoint.x(),endPoint.y());
-    setModified(true);
-    int rad = (getPenWidth() / 2) + 2;
-    update(QRect(lastPoint,endPoint).normalized().adjusted(-rad,-rad,+rad,+rad));
-    lastPoint=endPoint;
+void ScribbleArea::ChangeBrushActive(int brushActive){
+    shape->setBrushActive(brushActive);
 }
 
-void ScribbleArea::drawSpecifiElipse(const QPoint &endPoint){
-    QPainter painter(&image);
-    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawEllipse(lastPoint.x(),lastPoint.y(),endPoint.x(),endPoint.y());
-    setModified(true);
-    update();
-    lastPoint=endPoint;
-}
-
-void ScribbleArea::drawLasso(const QPoint &endPoint){
-    QPainter painter(&image);
-    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawLine(lastPoint,endPoint);
-    setModified(true);
-    update();
-}
-
-void ScribbleArea::drawEllipse(const QPoint &endPoint){
-    QPainter painter(&image);
-    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawEllipse(lastPoint.x(),lastPoint.y(),endPoint.x()-lastPoint.x(),endPoint.y()-lastPoint.y());
-    setModified(true);
-    update();
-}
-
-void ScribbleArea::drawSquare(const QPoint &endPoint){
-    QPainter painter(&image);
-    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawRect(lastPoint.x(),lastPoint.y(),endPoint.x()-lastPoint.x(),endPoint.y()-lastPoint.y());
-    setModified(true);
+void ScribbleArea::drawObject(MyShapes &shape,const QPoint &endPoint){
+    shape.setPenColor(getPenColor());
+    shape.setPenWidth(getPenWidth());
+    shape.CreateObject(&image,lastPoint,endPoint);
     update();
 }
 

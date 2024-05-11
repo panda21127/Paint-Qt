@@ -13,7 +13,9 @@
 Delegate::Delegate()
 {
         scribbleArea = new ScribbleArea;
+        brushActive = false;
 }
+
 void Delegate::start(View &viewport){
     connect(viewport.openAct,&QAction::triggered,this,&Delegate::open);
     foreach(QAction *action,viewport.saveAsActs){
@@ -26,8 +28,10 @@ void Delegate::start(View &viewport){
     viewport.setCentralWidget(scribbleArea);
     viewport.openAct->setShortcuts(QKeySequence::Open);
 
+    connect(viewport.drawPen,&QAction::triggered,this,&Delegate::drawPen);
     connect(viewport.penColor,&QAction::triggered,this,&Delegate::penColor);
     connect(viewport.penWidth,&QAction::triggered,this,&Delegate::penWidth);
+    connect(viewport.brushActive,&QAction::triggered,this,&Delegate::ActiveBrush);
 
     connect(viewport.drawLine,&QAction::triggered,this,&Delegate::drawLine);
     connect(viewport.ellipse,&QAction::triggered,this,&Delegate::drawEllipse);
@@ -102,28 +106,54 @@ bool Delegate::saveFile(const QByteArray &fileFormat){
     }
 }
 
+void Delegate::ActiveBrush(){
+    brushActive = !brushActive;
+    scribbleArea->ChangeBrushActive(brushActive);
+}
+void Delegate::drawPen(){
+        MyShapes *shape = new Line();
+        scribbleArea->setIndex(2);
+        scribbleArea->setShape(shape);
+}
+
 void Delegate::drawLine(){
+        MyShapes *shape = new Line();
         scribbleArea->setIndex(0);
+        scribbleArea->setShape(shape);
 }
 
 void Delegate::drawEllipse(){
-        scribbleArea->setIndex(1);
+        MyShapes *shape = new Elipse();
+        shape->setBrushActive(brushActive);
+        scribbleArea->setIndex(0);
+        scribbleArea->setShape(shape);
 }
 
 void Delegate::drawSquare(){
-        scribbleArea->setIndex(2);
+        MyShapes *shape = new Square();
+        shape->setBrushActive(brushActive);
+        scribbleArea->setIndex(0);
+        scribbleArea->setShape(shape);
 }
 
 void Delegate::drawSpecifiElipse(){
-        scribbleArea->setIndex(10);
+        MyShapes *shape = new Elipse();
+        shape->setBrushActive(brushActive);
+        scribbleArea->setIndex(1);
+        scribbleArea->setShape(shape);
 }
 
 void Delegate::drawSpecifiSquare(){
-        scribbleArea->setIndex(11);
+        MyShapes *shape = new Square();
+        shape->setBrushActive(brushActive);
+        scribbleArea->setIndex(1);
+        scribbleArea->setShape(shape);
 }
 
 void Delegate::drawLasso(){
-        scribbleArea->setIndex(12);
+        MyShapes *shape = new Line();
+        scribbleArea->setIndex(1);
+        scribbleArea->setShape(shape);
 }
 
 void Delegate::startExample(){

@@ -10,6 +10,9 @@ CONFIG += c++17
 
 SOURCES += \
     Delegate/delegate.cpp \
+    Model/Shapes/elipse.cpp \
+    Model/Shapes/line.cpp \
+    Model/Shapes/square.cpp \
     Model/example.cpp \
     Model/scribblearea.cpp \
     Model/zoomwidget.cpp \
@@ -18,7 +21,11 @@ SOURCES += \
 
 HEADERS += \
     Delegate/delegate.h \
+    Model/Shapes/elipse.h \
+    Model/Shapes/line.h \
+    Model/Shapes/square.h \
     Model/example.h \
+    Model/myshapes.h \
     Model/scribblearea.h \
     Model/zoomwidget.h \
     View/view.h \

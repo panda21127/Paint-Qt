@@ -44,13 +44,20 @@ void View::createMenu(){
     fileMenu->addAction(openAct);
 
     penMenu = new QMenu(tr("&Pen"),this);
+    drawPen = new QAction(tr("Pen"),this);
     penColor = new QAction(tr("Color"),this);
     penWidth = new QAction(tr("Width"),this);
+    //brushActive = new QAction(tr("Fill"),this);
+    //alignmentGroup = new QRadioButton(tr("Fill"),this);
+    brushActive = new QAction(tr("Fill"),this);
+
+    penMenu->addAction(drawPen);
     penMenu->addAction(penColor);
     penMenu->addAction(penWidth);
+    penMenu->addAction(brushActive);
 
     shapes = new QMenu(tr("&Shapes"),this);
-    drawLine = new QAction(tr("Pen"),this);
+    drawLine = new QAction(tr("Line"),this);
     ellipse = new QAction(tr("Ellipse"),this);
     square = new QAction(tr("Square"),this);
     shapes->addAction(drawLine);
