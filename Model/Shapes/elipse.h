@@ -1,6 +1,10 @@
 #ifndef ELIPSE_H
 #define ELIPSE_H
 
+/*
+The class for creating a elipse
+*/
+
 #include "Model/myshapes.h"
 
 class Elipse:public MyShapes{

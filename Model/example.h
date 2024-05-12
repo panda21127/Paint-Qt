@@ -1,6 +1,10 @@
 #ifndef EXAMPLE_H
 #define EXAMPLE_H
 
+/*
+The class somehow related to multithreading
+*/
+
 #include "Model/scribblearea.h"
 
 #include <QThread>
@@ -12,7 +16,7 @@ public:
     void setScribbleArea(ScribbleArea *area){ scribbleArea = area;};
 
 public slots:
-    void run();
+    void run(); // run thread program
 private:
     ScribbleArea *scribbleArea;
     QString name;

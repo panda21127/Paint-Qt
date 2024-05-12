@@ -1,6 +1,10 @@
 #ifndef LINE_H
 #define LINE_H
 
+/*
+The class for creating a line
+*/
+
 #include "Model/myshapes.h"
 
 class Line:public MyShapes{

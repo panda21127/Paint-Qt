@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+/*
+The test class for working with the zoooming
+*/
+
 class ZoomWidget: public QWidget
 {
 public:

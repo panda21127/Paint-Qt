@@ -1,6 +1,10 @@
 #ifndef SCRIBBLEAREA_H
 #define SCRIBBLEAREA_H
 
+/*
+The class for rendering everything on a widget
+*/
+
 #include "Model/Shapes/square.h"
 
 #include <QWidget>
@@ -20,7 +24,6 @@ public:
 
     bool isScribbling() const {return scribbling;};
     void setScribbling(bool scribble){ scribbling = scribble;};
-
 
     int getPenWidth() const {return myPenWidth;};
     void setPenWidth(int width){ myPenWidth = width;};
@@ -55,8 +58,8 @@ private:
     void drawObject(MyShapes &shape,const QPoint &endPoint);
 
     void resizeImage(QImage *image,const QSize &newSize);
-    bool loadConfig();
 
+    bool loadConfig();
 
     QJsonDocument doc;
     QJsonParseError docError;

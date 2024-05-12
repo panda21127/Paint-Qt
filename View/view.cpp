@@ -13,7 +13,7 @@ View::View(QWidget *parent)
     resize(800,500);
 }
 
-void View::arratactions(){
+void View::arrayActions(){
     foreach(QByteArray format,QImageWriter::supportedImageFormats()){
             QString text = tr("%1...").arg(QString(format).toUpper());
             QAction *action=new QAction(text,this);
@@ -23,19 +23,19 @@ void View::arratactions(){
 }
 
 void View::createMenu(){
+    //File
     fileMenu = new QMenu(tr("&File"),this);
+
     save = new QMenu(tr("Save as ..."),this);
-    arratactions();
-    foreach(QAction *action,saveAsActs){
-            save->addAction(action);
-        }
+    arrayActions();
+    save->addActions(saveAsActs);
+
+    saveConfig = new QAction(tr("Save Config"),this);
 
     createNew = new QAction(tr("Create New"),this);
 
-    saveConfig = new QAction(tr("Save Config"),this);
     openAct = new QAction (tr("&Open"),this);
     openAct->setShortcuts(QKeySequence::Open);
-
 
     fileMenu->addMenu(save);
     fileMenu->addAction(saveConfig);
@@ -43,43 +43,64 @@ void View::createMenu(){
     fileMenu->addSeparator();
     fileMenu->addAction(openAct);
 
+    //Pen
     penMenu = new QMenu(tr("&Pen"),this);
+
     drawPen = new QAction(tr("Pen"),this);
+
     penColor = new QAction(tr("Color"),this);
+
     penWidth = new QAction(tr("Width"),this);
+
+    brushActive = new QAction(tr("Fill"),this);
     //brushActive = new QAction(tr("Fill"),this);
     //alignmentGroup = new QRadioButton(tr("Fill"),this);
-    brushActive = new QAction(tr("Fill"),this);
 
     penMenu->addAction(drawPen);
     penMenu->addAction(penColor);
     penMenu->addAction(penWidth);
     penMenu->addAction(brushActive);
 
+    //Shapes
     shapes = new QMenu(tr("&Shapes"),this);
+
     drawLine = new QAction(tr("Line"),this);
+
     ellipse = new QAction(tr("Ellipse"),this);
+
     square = new QAction(tr("Square"),this);
+
     shapes->addAction(drawLine);
     shapes->addAction(ellipse);
     shapes->addAction(square);
 
+    //Specidic Shapes
     specifiShapes = new QMenu(tr("Specidic &Shapes"),this);
+
     drawSpecifiElipse = new QAction(tr("Specific Elipse"),this);
+
     drawSpecifiSquare = new QAction(tr("Specific Square"),this);
+
     lasso = new QAction(tr("Lasso"),this);
+
     specifiShapes->addAction(drawSpecifiElipse);
     specifiShapes->addAction(drawSpecifiSquare);
     specifiShapes->addAction(lasso);
 
+    //Example
     exampleMenu = new QAction(tr("&Example"),this);
 
+    //Information
     informationMenu = new QMenu(tr("&Information"),this);
+
     info = new QAction(tr("Info"),this);
+
     infoQT = new QAction(tr("InfoQT"),this);
+
     informationMenu->addAction(info);
     informationMenu->addAction(infoQT);
 
+    //Add MenuBar
     menuBar()->addMenu(fileMenu);
     menuBar()->addMenu(penMenu);
     menuBar()->addMenu(shapes);

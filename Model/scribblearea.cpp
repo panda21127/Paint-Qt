@@ -48,6 +48,28 @@ bool ScribbleArea::saveImage(const QString &fileName,const char *fileFormat){
     }
 }
 
+void ScribbleArea::saveConfigJSON(){
+    QFile file;
+    //globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
+    //file.setFileName(globalPath);
+    file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
+    if(file.open(QIODevice::WriteOnly|QFile::Text)){
+        QJsonObject jsonObj = doc.object();
+        jsonObj.insert("penColor",QJsonValue::fromVariant(myPenColor));
+        jsonObj.insert("penWidth",QJsonValue::fromVariant(myPenWidth));
+        QJsonDocument doc(jsonObj);
+        QString jsonString = doc.toJson(QJsonDocument::Indented);
+        QTextStream stream (&file);
+        stream<<jsonString;
+        qDebug()<<jsonObj["penWidth"].toInt();
+        //file.write(doc.toJson());
+        file .close();
+    }
+    else{
+        QMessageBox::information(nullptr,"info","Файл не открыт на чтенеи");
+    }
+}
+
 bool ScribbleArea::loadConfig(){
     QFile file;
     //globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
@@ -78,32 +100,17 @@ bool ScribbleArea::loadConfig(){
     }
 }
 
-void ScribbleArea::saveConfigJSON(){
-    QFile file;
-    //globalPath = QFileDialog::getOpenFileName(nullptr,"",QDir::currentPath() + "/../Paint-Qt/Config","*.json");
-    //file.setFileName(globalPath);
-    file.setFileName(QDir::currentPath() + "/../Paint-Qt/Config/PEN.json");
-    if(file.open(QIODevice::WriteOnly|QFile::Text)){
-        QJsonObject jsonObj = doc.object();
-        jsonObj.insert("penColor",QJsonValue::fromVariant(myPenColor));
-        jsonObj.insert("penWidth",QJsonValue::fromVariant(myPenWidth));
-        QJsonDocument doc(jsonObj);
-        QString jsonString = doc.toJson(QJsonDocument::Indented);
-        QTextStream stream (&file);
-        stream<<jsonString;
-        qDebug()<<jsonObj["penWidth"].toInt();
-        //file.write(doc.toJson());
-        file .close();
-    }
-    else{
-        QMessageBox::information(nullptr,"info","Файл не открыт на чтенеи");
-    }
-}
-
 void ScribbleArea::clearImage(){
     image.fill(qRgb(255,255,255));
     setModified(true);
     update();
+}
+
+void ScribbleArea::paintEvent(QPaintEvent *event){
+    QPainter painter(this);
+    QRect dirtyRect = event->rect();
+    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+    painter.drawImage(dirtyRect,image,dirtyRect);
 }
 
 void ScribbleArea::mousePressEvent(QMouseEvent *event){
@@ -133,13 +140,6 @@ void ScribbleArea::mouseReleaseEvent(QMouseEvent *event){
         drawObject(*shape,event->pos());
         setScribbling(false);
     }
-}
-
-void ScribbleArea::paintEvent(QPaintEvent *event){
-    QPainter painter(this);
-    QRect dirtyRect = event->rect();
-    painter.setPen(QPen(getPenColor(),getPenWidth(),Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-    painter.drawImage(dirtyRect,image,dirtyRect);
 }
 
 void ScribbleArea::resizeEvent(QResizeEvent *event){

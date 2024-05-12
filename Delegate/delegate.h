@@ -1,6 +1,10 @@
 #ifndef DELEGATE_H
 #define DELEGATE_H
 
+/*
+The class for connecting buttons to model functions, extending models
+*/
+
 #include "View/view.h"
 #include "Model/scribblearea.h"
 #include "Model/example.h"
@@ -18,25 +22,33 @@ public:
     void start(View &viewport);
     ~Delegate();
 private slots:
-    void open();
+    //File
     void save();
     void saveConfig();
     void createNew();
-    void about();
+    void open();
+
+    //Pen
+    void drawPen();
     void penColor();
     void penWidth();
+    void ActiveBrush();
 
-    void drawPen();
+    //Shapes
     void drawLine();
     void drawEllipse();
     void drawSquare();
 
+    //Specidic Shapes
     void drawSpecifiElipse();
     void drawSpecifiSquare();
     void drawLasso();
 
-    void ActiveBrush();
+    //Example
     void startExample();
+
+    //Information
+    void about();
 private:
     bool saveFile(const QByteArray &fileFormat);
     QPoint lastPoint;
