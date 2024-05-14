@@ -65,6 +65,7 @@ private:
     QJsonParseError docError;
     QString globalPath;
     QPoint lastPoint;
+    QPoint tempPoint;
     QImage image;
 
     bool modified;

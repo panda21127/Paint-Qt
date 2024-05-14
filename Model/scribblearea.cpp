@@ -116,23 +116,21 @@ void ScribbleArea::paintEvent(QPaintEvent *event){
 void ScribbleArea::mousePressEvent(QMouseEvent *event){
     if(event->buttons() == Qt::LeftButton){
         lastPoint = event->pos();
-        setScribbling(true);
     }
 }
 
 void ScribbleArea::mouseMoveEvent(QMouseEvent *event){
-
-    setModified(true);
-    switch(index){
-    case 1:{drawObject(*shape,event->pos());break;}
-    case 2:{
+    if(index== 2){
         shape = new Line();
         drawObject(*shape,event->pos());
         int rad = (getPenWidth() / 2) + 2;
         update(QRect(lastPoint,event->pos()).normalized().adjusted(-rad,-rad,+rad,+rad));
         lastPoint=event->pos();
-        break;}
+    }else{
+        drawObject(*shape,event->pos());
     }
+    setScribbling(true);
+    setModified(true);
 }
 
 void ScribbleArea::mouseReleaseEvent(QMouseEvent *event){
@@ -168,9 +166,16 @@ void ScribbleArea::ChangeBrushActive(int brushActive){
 }
 
 void ScribbleArea::drawObject(MyShapes &shape,const QPoint &endPoint){
+    if(index == 0 && isScribbling()){
+        // How to remember the background color before painting the shape?
+        shape.setPenColor(Qt::white);
+        shape.setPenWidth(getPenWidth());
+        shape.CreateObject(&image,lastPoint,tempPoint);
+    }
     shape.setPenColor(getPenColor());
     shape.setPenWidth(getPenWidth());
     shape.CreateObject(&image,lastPoint,endPoint);
+    tempPoint = endPoint;
     update();
 }
 

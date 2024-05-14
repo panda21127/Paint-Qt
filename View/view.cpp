@@ -75,7 +75,7 @@ void View::createMenu(){
     shapes->addAction(square);
 
     //Specidic Shapes
-    specifiShapes = new QMenu(tr("Specidic &Shapes"),this);
+    specifiShapes = new QMenu(tr("Specific &Shapes"),this);
 
     drawSpecifiElipse = new QAction(tr("Specific Elipse"),this);
 

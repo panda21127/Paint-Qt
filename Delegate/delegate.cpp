@@ -38,8 +38,8 @@ void Delegate::start(View &viewport){
     connect(viewport.ellipse,&QAction::triggered,this,&Delegate::drawEllipse);
     connect(viewport.square,&QAction::triggered,this,&Delegate::drawSquare);
 
-    connect(viewport.drawSpecifiElipse,&QAction::triggered,this,&Delegate::drawSpecifiElipse);
-    connect(viewport.drawSpecifiSquare,&QAction::triggered,this,&Delegate::drawSpecifiSquare);
+    connect(viewport.drawSpecifiElipse,&QAction::triggered,this,&Delegate::drawSpecificElipse);
+    connect(viewport.drawSpecifiSquare,&QAction::triggered,this,&Delegate::drawSpecificSquare);
     connect(viewport.lasso,&QAction::triggered,this,&Delegate::drawLasso);
 
     connect(viewport.info,&QAction::triggered,this,&Delegate::about);
@@ -137,14 +137,14 @@ void Delegate::drawSquare(){
         scribbleArea->setShape(shape);
 }
 
-void Delegate::drawSpecifiElipse(){
+void Delegate::drawSpecificElipse(){
         MyShapes *shape = new Elipse();
         shape->setBrushActive(brushActive);
         scribbleArea->setIndex(1);
         scribbleArea->setShape(shape);
 }
 
-void Delegate::drawSpecifiSquare(){
+void Delegate::drawSpecificSquare(){
         MyShapes *shape = new Square();
         shape->setBrushActive(brushActive);
         scribbleArea->setIndex(1);

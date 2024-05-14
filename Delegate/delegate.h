@@ -40,8 +40,8 @@ private slots:
     void drawSquare();
 
     //Specidic Shapes
-    void drawSpecifiElipse();
-    void drawSpecifiSquare();
+    void drawSpecificElipse();
+    void drawSpecificSquare();
     void drawLasso();
 
     //Example
